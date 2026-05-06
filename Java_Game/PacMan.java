@@ -22,7 +22,7 @@ public class PacMan extends JPanel {
             this.height = height;
             this.startX = x;
             this.startY = y;
-
+            this.image = image;
         }
     }
 
