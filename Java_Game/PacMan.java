@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.random.*;
 import javax.swing.*;
+import java.io.*;
 
 public class PacMan extends JPanel implements ActionListener, KeyListener {
     class Block {
@@ -143,6 +144,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         pacmanLeftImage = new ImageIcon(getClass().getResource("./pacmanLeft.png")).getImage();
         pacmanRightImage = new ImageIcon(getClass().getResource("./pacmanRight.png")).getImage();
 
+        loadHighScore();
         loadMap();
         for (Block ghost : ghosts) {
             char newDirection = direction[random.nextInt(4)];
@@ -151,6 +153,28 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         // 타이머를 시작하는 데 걸리는 시간, 프레임 사이에 걸리는 시간(밀리초)
         gameLoop = new Timer(50, this); // 20fps (1000/50)
         gameLoop.start();
+    }
+
+    // 최고 점수 로드
+    private void loadHighScore() {
+        try (BufferedReader reader = new BufferedReader(new FileReader("highscore.txt"))) {
+            String line = reader.readLine();
+            if (line != null) {
+                highScore = Integer.parseInt(line);
+            }
+        } catch (IOException | NumberFormatException e) {
+            // 파일이 없거나 내용이 비어있으면 0으로 유지
+            highScore = 0;
+        }
+    }
+
+    // 최고 점수 저장
+    private void saveHighScore() {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("highscore.txt"))) {
+            writer.println(highScore);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadMap() {
@@ -282,6 +306,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 score += 10;
                 if (score > highScore) {
                     highScore = score;
+                    saveHighScore();
                 }
             }
         }
