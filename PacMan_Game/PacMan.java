@@ -80,6 +80,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
     private Image redGhostImage;
     private Image orangeGhostImage;
     private Image BackgroundImage;
+    private Image FoodImage;
 
     private Image pacmanUpImage;
     private Image pacmanRightImage;
@@ -127,17 +128,18 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
     PacMan() {
         setPreferredSize(new Dimension(boardWidth, boardHeight));
-        setBackground(Color.black);
+        // setBackground(Color.black);
         addKeyListener(this);
         setFocusable(true);
 
         // load Images
-        BackgroundImage = new ImageIcon("./ios_05.jpg").getImage();
+        BackgroundImage = new ImageIcon("./backGround.jpg").getImage();
         wallImage = new ImageIcon(getClass().getResource("./wall.png")).getImage();
-        blueGhostImage = new ImageIcon(getClass().getResource("./blueGhost.png")).getImage();
-        orangeGhostImage = new ImageIcon(getClass().getResource("./orangeGhost.png")).getImage();
-        pinkGhostImage = new ImageIcon(getClass().getResource("./pinkGhost.png")).getImage();
-        redGhostImage = new ImageIcon(getClass().getResource("./redGhost.png")).getImage();
+        blueGhostImage = new ImageIcon(getClass().getResource("./blueMushroom.png")).getImage();
+        orangeGhostImage = new ImageIcon(getClass().getResource("./slime.png")).getImage();
+        pinkGhostImage = new ImageIcon(getClass().getResource("./snail.png")).getImage();
+        redGhostImage = new ImageIcon(getClass().getResource("./pig.png")).getImage();
+        FoodImage = new ImageIcon("food.gif").getImage();
 
         pacmanUpImage = new ImageIcon(getClass().getResource("./pacmanUp.png")).getImage();
         pacmanDownImage = new ImageIcon(getClass().getResource("./pacmanDown.png")).getImage();
@@ -208,7 +210,7 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
                 } else if (tileMapChar == 'P') { // Pacman
                     pacman = new Block(pacmanRightImage, x, y, tileSize, tileSize);
                 } else if (tileMapChar == ' ') { // food
-                    Block food = new Block(null, x + 14, y + 14, 4, 4);
+                    Block food = new Block(FoodImage, x + 14, y + 14, 15, 15);
                     foods.add(food);
                 }
             }
@@ -234,7 +236,8 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
 
         g.setColor(Color.WHITE);
         for (Block food : foods) {
-            g.fillRect(food.x, food.y, food.width, food.height);
+            // g.fillRect(food.x, food.y, food.width, food.height);
+            g.drawImage(food.image,food.x, food.y, food.width, food.height,null);
         }
 
         // score
