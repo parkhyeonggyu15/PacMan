@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.random.*;
 import javax.swing.*;
 import java.io.*;
+import javax.sound.sampled.*;
 
 public class PacMan extends JPanel implements ActionListener, KeyListener {
     class Block {
@@ -133,18 +134,18 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         setFocusable(true);
 
         // load Images
-        BackgroundImage = new ImageIcon("./backGround.jpg").getImage();
-        wallImage = new ImageIcon(getClass().getResource("./wall.png")).getImage();
-        blueGhostImage = new ImageIcon(getClass().getResource("./blueMushroom.png")).getImage();
-        orangeGhostImage = new ImageIcon(getClass().getResource("./slime.png")).getImage();
-        pinkGhostImage = new ImageIcon(getClass().getResource("./snail.png")).getImage();
-        redGhostImage = new ImageIcon(getClass().getResource("./pig.png")).getImage();
-        FoodImage = new ImageIcon("food.gif").getImage();
+        BackgroundImage = new ImageIcon(getClass().getResource("/backGround.jpg")).getImage();
+        wallImage = new ImageIcon(getClass().getResource("/wall.png")).getImage();
+        blueGhostImage = new ImageIcon(getClass().getResource("/blueMushroom.png")).getImage();
+        orangeGhostImage = new ImageIcon(getClass().getResource("/slime.png")).getImage();
+        pinkGhostImage = new ImageIcon(getClass().getResource("/snail.png")).getImage();
+        redGhostImage = new ImageIcon(getClass().getResource("/pig.png")).getImage();
+        FoodImage = new ImageIcon(getClass().getResource("/food.gif")).getImage();
 
-        pacmanUpImage = new ImageIcon(getClass().getResource("./pacmanUp.png")).getImage();
-        pacmanDownImage = new ImageIcon(getClass().getResource("./pacmanDown.png")).getImage();
-        pacmanLeftImage = new ImageIcon(getClass().getResource("./pacmanLeft.png")).getImage();
-        pacmanRightImage = new ImageIcon(getClass().getResource("./pacmanRight.png")).getImage();
+        pacmanUpImage = new ImageIcon(getClass().getResource("/pacmanUp.png")).getImage();
+        pacmanDownImage = new ImageIcon(getClass().getResource("/pacmanDown.png")).getImage();
+        pacmanLeftImage = new ImageIcon(getClass().getResource("/pacmanLeft.png")).getImage();
+        pacmanRightImage = new ImageIcon(getClass().getResource("/pacmanRight.png")).getImage();
 
         loadHighScore();
         loadMap();
@@ -253,6 +254,20 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
         }
     }
 
+   
+    public void playSound(String soundFilePath) {
+    try {
+        // 사운드 파일 로드 (파일 경로에 맞게 수정 필요)
+        java.net.URL soundURL = getClass().getResource("/eatingSound.wav");
+        AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundURL);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioIn);
+        clip.start(); // 재생
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
     public void move() {
         pacman.x += pacman.velocityX;
         pacman.y += pacman.velocityY;
@@ -307,6 +322,9 @@ public class PacMan extends JPanel implements ActionListener, KeyListener {
             if (collision(pacman, food)) {
                 foodeaten = food;
                 score += 10;
+
+               playSound("eatingSound.wav");
+
                 if (score > highScore) {
                     highScore = score;
                     saveHighScore();
